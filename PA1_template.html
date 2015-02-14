@@ -184,9 +184,6 @@ meanStepsPerInterval2 &lt;-
 meanStepsPerInterval &lt;- rbind(meanStepsPerInterval1,meanStepsPerInterval2)
 meanStepsPerInterval$dayType = factor(meanStepsPerInterval$dayType)
 
-
-
-
 ggplot(meanStepsPerInterval,aes(x=interval,y=means)) + 
    geom_line(color=&quot;blue&quot;) + 
    xlab(&quot;5 Minute Intervals&quot;) + ylab(&quot;Average Steps&quot;) +
@@ -199,8 +196,7 @@ ggplot(meanStepsPerInterval,aes(x=interval,y=means)) +
 </div>
 <div id="r-code" class="section level1">
 <h1>R Code</h1>
-<p>Graphs and other dynamic results contained in this report were produced only by the R Code contained in this document.</p>
-<p>G GPlot was used for the graphics.</p>
+<p>Graphs and other dynamic results contained in this report were produced only by the R Code contained in this document. GPlot was used for the graphics</p>
 </div>
 
 
