@@ -125,7 +125,7 @@ daysWithCollections &lt;- collectedIntervalsByDays[collectedIntervalsByDays != 0
 <p>The sample, or data set, contains records for 61 days however step data is missing for 8 of these days.</p>
 <div id="strategy-for-imputting-missing-data" class="section level3">
 <h3>Strategy for Imputting Missing Data</h3>
-<p>There are 288 collection invervals per day (24 * 60 / 5 == 288). All days in the sample with collections have values for all 288 intervals where this proved by expression ** all(daysWithCollections == 288)** : TRUE</p>
+<p>There are 288 collection invervals per day (24 * 60 / 5 == 288). All days in the sample with collections have values for all 288 intervals where this proved by expression <strong>all(daysWithCollections == 288)</strong> : TRUE</p>
 <p>A simple strategy will be applied to replace missing values. A median value is calculated for each interval. A record with a missing steps value will be replaced with median value which corresponds to the records inteval value.</p>
 <pre class="r"><code># Calculate the median values. 
 medianStepsPerInterval &lt;- with(data[!is.na(data$steps),],tapply(steps,interval,median))

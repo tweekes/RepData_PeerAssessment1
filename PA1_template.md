@@ -95,7 +95,7 @@ The sample, or data set, contains records for 61 days however step data is missi
 
 ### Strategy for Imputting Missing Data
 
-There are 288 collection invervals per day (24 \* 60 / 5 == 288). All days in the sample with collections have values for all 288 intervals where this proved by expression ** all(daysWithCollections == 288)** : TRUE 
+There are 288 collection invervals per day (24 \* 60 / 5 == 288). All days in the sample with collections have values for all 288 intervals where this proved by expression **all(daysWithCollections == 288)** : TRUE 
 
 A simple strategy will be applied to replace missing values. A median value is calculated for each interval. A record with a missing steps value will be replaced with median value which corresponds to the records inteval value.
 
