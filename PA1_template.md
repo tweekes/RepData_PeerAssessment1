@@ -1,14 +1,9 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
-
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r loadData,echo=TRUE}  
+
+```r
 library(ggplot2)
 options(scipen = 1, digits = 2) # Need so numerics are rendered with a sensible format. 
 
@@ -25,7 +20,6 @@ data$date <- as.Date(as.character(data$date), "%Y-%m-%d")
 
 # Calculate the total number of steps taken per day.
 totalStepsPerDayNA <- with(data[!is.na(data$steps),],tapply(steps,date,sum))                     
-
 ```
 
 ## What is mean total number of steps taken per day?
@@ -34,7 +28,8 @@ The total number of steps per day could only be calculated for days that step da
 
 The histogram below summarises the total steps taken each day and the mean is also depicted by the blue dashed vertical line. 
 
-```{r graphStepsPerDay}
+
+```r
 ggplot(NULL, aes(x=totalStepsPerDayNA)) + 
     geom_histogram(binwidth=1000, colour="black", fill="cyan") +
     geom_vline(aes(xintercept=mean(totalStepsPerDayNA)), color="blue", linetype="dashed", size=1) +
@@ -43,15 +38,18 @@ ggplot(NULL, aes(x=totalStepsPerDayNA)) +
     scale_x_continuous(breaks=seq(0,22000,by=2000))
 ```
 
+![](./PA1_template_files/figure-html/graphStepsPerDay-1.png) 
 
-The **mean** number of steps for each day is `r mean(totalStepsPerDayNA)` and the **median** is `r median(totalStepsPerDayNA)`.  
+
+The **mean** number of steps for each day is 10766.19 and the **median** is 10765.  
 
 ## What is the average daily activity pattern?
 
 The graph below depicts the average activity levels (steps) as captured at 5 minute intervals through out each day in the study period. 
 
 
-```{r graphStepsPerInterval}
+
+```r
 meanStepsPerInterval <- with(data[!is.na(data$steps),],tapply(steps,interval,mean))
 uniqueIntervals = as.numeric(names(meanStepsPerInterval))
 
@@ -67,13 +65,15 @@ ggplot(NULL,aes(x=uniqueIntervals,y=meanStepsPerInterval)) +
                        labels=c("00:00","03:00","06:00","09:00","12:00","15:00","18:00","21:00","23:55"))
 ```
 
+![](./PA1_template_files/figure-html/graphStepsPerInterval-1.png) 
 
-The maximum average step activity occured at 5 minute interval: `r categoryIndexOfMaxAverage` and the average was `r maxAverageSteps`.
+
+The maximum average step activity occured at 5 minute interval: 835 and the average was 206.17.
 
 ## Imputing missing values
 
-```{r missingValues}
 
+```r
 # Check if step values are available for each day.
 sumNAs <- function(v) sum(!is.na(v))
 collectedIntervalsByDays <- with(data,tapply(steps,date,sumNAs))
@@ -81,20 +81,20 @@ totalDays = length(collectedIntervalsByDays)
 daysWithNoCollections <- length(collectedIntervalsByDays[collectedIntervalsByDays == 0])
 daysWithCollections <- totalDays - daysWithNoCollections
 daysWithCollections <- collectedIntervalsByDays[collectedIntervalsByDays != 0]
-
 ```
 
 
-The sample, or data set, contains records for `r totalDays` days however step data is missing for `r daysWithNoCollections` of these days. 
+The sample, or data set, contains records for 61 days however step data is missing for 8 of these days. 
 
 ### Strategy for Imputting Missing Data
 
-There are 288 collection invervals per day (24 \* 60 / 5 == 288). All days in the sample with collections have values for all 288 intervals where this proved by expression ** all(daysWithCollections == 288)** : `r all(daysWithCollections == 288)` 
+There are 288 collection invervals per day (24 \* 60 / 5 == 288). All days in the sample with collections have values for all 288 intervals where this proved by expression ** all(daysWithCollections == 288)** : TRUE 
 
 A simple strategy will be applied to replace missing values. A median value is calculated for each interval. A record with a missing steps value will be replaced with median value which corresponds to the records inteval value.
 
 
-```{r fillMissingValues}
+
+```r
 # Calculate the median values. 
 medianStepsPerInterval <- with(data[!is.na(data$steps),],tapply(steps,interval,median))
 
@@ -121,22 +121,24 @@ ggplot(NULL, aes(x=totalStepsPerDayFull)) +
     xlab("Total steps taken each day") + ylab("Number of days") +
     ggtitle("Total Number of Steps with Filled Missing Values") +
     scale_x_continuous(breaks=seq(0,22000,by=2000))
-
 ```
+
+![](./PA1_template_files/figure-html/fillMissingValues-1.png) 
 
 ### Impact of inputting missing values 
 
 As can be seen below, both the mean and median reduced when missing values were filled in. Also, the dashed blue line on the historgram above depicts the reduced mean value.
 
-* Mean with missing values: `r mean(totalStepsPerDayNA)`
-* Mean with filled values: `r mean(totalStepsPerDayFull)`
-* Median with missing values: `r median(totalStepsPerDayNA)`
-* Median with filled values: `r median(totalStepsPerDayFull)` 
+* Mean with missing values: 10766.19
+* Mean with filled values: 9503.87
+* Median with missing values: 10765
+* Median with filled values: 10395 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r weekdays}
+
+```r
 # Classify each record as weekend or weekday. 
 classifyDayType <- function(d) {
     if (d == "Saturday" | d == "Sunday")
@@ -171,15 +173,13 @@ ggplot(meanStepsPerInterval,aes(x=interval,y=means)) +
                       labels=c("00:00","03:00","06:00","09:00","12:00",
                                "15:00","18:00","21:00","23:55")) + 
    facet_grid(dayType ~ .) 
-   
-
 ```
 
-# R Code
+![](./PA1_template_files/figure-html/weekdays-1.png) 
+
+# R COde
 
 Graphs and other dynamic results contained in this report were produced only by the R Code contained in this document.
-
-G GPlot was used for the graphics.
 
 
 
